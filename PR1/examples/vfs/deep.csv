@@ -1,0 +1,14 @@
+path,type,encoding,content
+/,dir,,
+/etc,dir,,
+/etc/hosts,file,text,127.0.0.1 localhost
+/home,dir,,
+/home/user,dir,,
+/home/user/docs,dir,,
+/home/user/docs/work,dir,,
+/home/user/docs/work/report.txt,file,text,Quarterly report
+/home/user/docs/work/archive,dir,,
+/home/user/docs/work/archive/old.txt,file,text,Old report
+/home/user/docs/todo.txt,file,text,Write tests
+/home/user/pics/logo.png,file,base64,iVBORw0KGgo=
+/tmp,dir,,

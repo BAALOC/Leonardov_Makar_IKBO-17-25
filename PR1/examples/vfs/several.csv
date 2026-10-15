@@ -1,0 +1,7 @@
+path,type,encoding,content
+/readme.txt,file,text,Several files in the root
+/notes.txt,file,text,"Line one
+Line two"
+/data.bin,file,base64,AAECAwQFBgc=
+/docs,dir,,
+/docs/todo.txt,file,text,"buy milk, write code"

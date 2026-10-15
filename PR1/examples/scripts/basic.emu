@@ -1,0 +1,11 @@
+# Stub commands
+ls
+ls -l /home
+cd /tmp
+cd
+
+# Environment variables
+ls $HOME
+cd ${HOME}/docs
+
+ls /  # a trailing comment

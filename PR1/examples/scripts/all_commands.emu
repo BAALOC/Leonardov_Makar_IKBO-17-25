@@ -1,0 +1,25 @@
+# Stubs: no arguments, options, paths
+ls
+ls -l
+ls /home/user/docs
+cd
+cd /etc
+cd ..
+
+# Environment variables
+ls $HOME
+cd ${HOME}/docs
+ls $EMU_UNDEFINED /tmp
+
+# Service command: the whole VFS
+vfs-tree
+
+# Errors
+foo
+foo bar
+exit now
+vfs-tree /etc
+
+# Comments and blank lines are skipped
+
+ls /  # a trailing comment
