@@ -1,0 +1,7 @@
+# Unknown commands
+foo
+foo bar baz
+
+# Invalid arguments
+exit now
+vfs-tree /
