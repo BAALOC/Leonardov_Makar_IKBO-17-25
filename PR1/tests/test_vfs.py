@@ -4,6 +4,7 @@ import io
 import shutil
 import tempfile
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from emulator.vfs import (
@@ -127,10 +128,12 @@ class InvalidVfsTest(unittest.TestCase):
 class LoadVfsTest(unittest.TestCase):
     """Loading from files."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
 
     def test_load_file(self) -> None:
         """A file is loaded into memory, including a BOM."""

@@ -2,6 +2,7 @@
 
 import gzip
 import unittest
+from functools import cached_property
 
 from depgraph.apk import (
     ApkIndex, Package, extract_index, index_url, load_apk_index,
@@ -66,9 +67,10 @@ class ParseIndexTest(unittest.TestCase):
 class DependenciesTest(unittest.TestCase):
     """Resolution of direct dependencies."""
 
-    def setUp(self) -> None:
-        """Parse the sample index."""
-        self.index = parse_index(SAMPLE_INDEX)
+    @cached_property
+    def index(self) -> ApkIndex:
+        """Return the parsed sample index."""
+        return parse_index(SAMPLE_INDEX)
 
     def test_curl(self) -> None:
         """Virtual names become packages, constraints are removed."""

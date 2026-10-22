@@ -11,6 +11,7 @@ import threading
 import unittest
 from collections.abc import Iterator
 from contextlib import contextmanager
+from functools import cached_property
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
 from unittest import mock
@@ -95,20 +96,26 @@ class QuietHandler(SimpleHTTPRequestHandler):
 class ServerTestCase(unittest.TestCase):
     """Test case with a local HTTP server and no proxy for it."""
 
-    def setUp(self) -> None:
-        """Start the server over an empty temporary directory."""
-        self.root = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.root)
+    @cached_property
+    def root(self) -> Path:
+        """Return an empty temporary directory served by the server."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
+
+    @cached_property
+    def server(self) -> HTTPServer:
+        """Start the server over the root directory without a proxy."""
         handler = functools.partial(QuietHandler, directory=str(self.root))
-        self.server = HTTPServer(('127.0.0.1', 0), handler)
-        thread = threading.Thread(target=self.server.serve_forever,
-                                  daemon=True)
+        server = HTTPServer(('127.0.0.1', 0), handler)
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
         thread.start()
         self.addCleanup(self.stop_server)
         patcher = mock.patch.dict(
             os.environ, {'no_proxy': '127.0.0.1', 'NO_PROXY': '127.0.0.1'})
         patcher.start()
         self.addCleanup(patcher.stop)
+        return server
 
     def stop_server(self) -> None:
         """Stop the server."""

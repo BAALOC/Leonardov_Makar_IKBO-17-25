@@ -3,6 +3,7 @@
 import shutil
 import tempfile
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from emulator.script import ScriptError, read_script
@@ -11,10 +12,12 @@ from emulator.script import ScriptError, read_script
 class ReadScriptTest(unittest.TestCase):
     """Reading of script files."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
 
     def test_lines_are_returned(self) -> None:
         """Every line of the file is returned."""

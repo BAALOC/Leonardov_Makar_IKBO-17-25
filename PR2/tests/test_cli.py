@@ -5,6 +5,7 @@ import io
 import shutil
 import tempfile
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from depgraph.cli import EXIT_FAILURE, EXIT_SUCCESS, main
@@ -22,10 +23,12 @@ def run_main(*argv: str) -> tuple[int, str, str]:
 class TestModeTest(unittest.TestCase):
     """Work with a test repository file."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
 
     def write_repo(self, text: str) -> str:
         """Write a test repository file and return its path."""

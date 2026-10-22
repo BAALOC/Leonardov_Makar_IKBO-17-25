@@ -6,6 +6,7 @@ import shutil
 import tempfile
 import tkinter as tk
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from emulator.cli import EXIT_FAILURE, EXIT_SUCCESS, main
@@ -16,10 +17,12 @@ HEADER = 'path,type,encoding,content\n'
 class MainTest(unittest.TestCase):
     """Startup errors and a complete run."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
 
     def run_main(self, *argv: str) -> tuple[int, str]:
         """Run main and return the exit code with the stderr text."""

@@ -2,6 +2,7 @@
 
 import os
 import unittest
+from functools import cached_property
 from unittest import mock
 
 from emulator.shell import Shell
@@ -11,9 +12,10 @@ from emulator.vfs import Node
 class ShellTest(unittest.TestCase):
     """Behaviour of the stub commands and of error reporting."""
 
-    def setUp(self) -> None:
-        """Create a shell."""
-        self.shell = Shell('demo')
+    @cached_property
+    def shell(self) -> Shell:
+        """Return a shell attached to a VFS named demo."""
+        return Shell('demo')
 
     def test_prompt_contains_vfs_name(self) -> None:
         """The prompt shows the VFS name."""

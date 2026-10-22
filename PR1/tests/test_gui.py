@@ -2,6 +2,7 @@
 
 import tkinter as tk
 import unittest
+from functools import cached_property
 from unittest import mock
 
 from emulator.gui import EmulatorWindow
@@ -11,18 +12,21 @@ from emulator.shell import Shell
 class EmulatorWindowTest(unittest.TestCase):
     """Window title, command echo and error display."""
 
-    def setUp(self) -> None:
-        """Create a hidden window or skip the test."""
+    @cached_property
+    def window(self) -> EmulatorWindow:
+        """Return a window on a hidden root, or skip the test."""
         try:
-            self.root = tk.Tk()
+            root = tk.Tk()
         except tk.TclError:
             self.skipTest('no display available')
-        self.root.withdraw()
-        self.window = EmulatorWindow(self.root, Shell('demo'))
+        root.withdraw()
+        self.addCleanup(root.destroy)
+        return EmulatorWindow(root, Shell('demo'))
 
-    def tearDown(self) -> None:
-        """Destroy the window."""
-        self.root.destroy()
+    @property
+    def root(self) -> tk.Tk:
+        """Return the root of the window under test."""
+        return self.window.root
 
     def text(self) -> str:
         """Return the whole output area."""

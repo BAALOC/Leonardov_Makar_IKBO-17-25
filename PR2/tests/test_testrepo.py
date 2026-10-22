@@ -3,6 +3,7 @@
 import shutil
 import tempfile
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from depgraph.repository import RepositoryError
@@ -87,10 +88,12 @@ class InvalidTest(unittest.TestCase):
 class LoadTest(unittest.TestCase):
     """Reading from files."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
 
     def test_load(self) -> None:
         """A file is read."""

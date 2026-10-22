@@ -5,6 +5,7 @@ import io
 import shutil
 import tempfile
 import unittest
+from functools import cached_property
 from pathlib import Path
 
 from depgraph.config import Config, parse_args
@@ -15,12 +16,19 @@ URL = 'https://dl-cdn.alpinelinux.org/alpine/v3.20/main/x86_64'
 class ParseArgsTest(unittest.TestCase):
     """Valid and invalid command lines."""
 
-    def setUp(self) -> None:
-        """Create a temporary directory with a test repository file."""
-        self.base = Path(tempfile.mkdtemp())
-        self.addCleanup(shutil.rmtree, self.base)
-        self.repo_file = self.base / 'repo.txt'
-        self.repo_file.write_text('A:\n', encoding='utf-8')
+    @cached_property
+    def base(self) -> Path:
+        """Return a temporary directory removed after the test."""
+        path = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, path)
+        return path
+
+    @cached_property
+    def repo_file(self) -> Path:
+        """Return the path of a test repository file."""
+        path = self.base / 'repo.txt'
+        path.write_text('A:\n', encoding='utf-8')
+        return path
 
     def error_of(self, *argv: str) -> str:
         """Return the error text printed for invalid arguments."""
