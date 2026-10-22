@@ -1,0 +1,5 @@
+# Only packages reachable from the analyzed one are shown
+A: B
+B:
+C: D
+D:

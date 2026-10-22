@@ -1,0 +1,6 @@
+# Several cycles, including a self-dependency
+A: B C
+B: A
+C: D
+D: C E
+E: E

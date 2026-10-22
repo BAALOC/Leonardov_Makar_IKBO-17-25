@@ -1,0 +1,5 @@
+# D is shared and is visited once
+A: B C
+B: D
+C: D
+D:

@@ -1,0 +1,6 @@
+# Names of several letters, for the substring filter
+A: AB BC
+AB: ABC
+BC: C
+ABC: C
+C:

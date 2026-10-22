@@ -1,0 +1,5 @@
+# A linear chain
+A: B
+B: C
+C: D
+D:

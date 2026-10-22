@@ -1,0 +1,3 @@
+# X has no line of its own and is a leaf
+A: B X
+B:
